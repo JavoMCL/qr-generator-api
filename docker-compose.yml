@@ -1,0 +1,26 @@
+services:
+  qr_generator_api:
+    build: qr-generator-api
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://qr-generator-api:3306/qr_db?createDatabaseIfNotExist=true&serverTimezone-UTC
+      DB_USER: root
+      DB_PASSWORD: kjpfzyd2gvqq.128
+    restart: always
+    depends_on:
+      qr-generator-api:
+          condition: service_healthy
+  qr-generator-api:
+    image: mysql:8.0.33
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: kjpfzyd2gvqq.128
+      MYSQL_PASSWORD: kjpfzyd2gvqq.128
+      MYSQL_DATABASE: qr_db
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
